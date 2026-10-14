@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+.vercel
+
+# original photo copies (the published ones live in public/images)
+/*.jpeg
