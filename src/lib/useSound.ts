@@ -67,44 +67,81 @@ function startSynth(): Synth | null {
   };
 }
 
-/** Sound is off until the visitor asks for it. Never autoplays. */
+/**
+ * Music is ON by default. Browsers refuse to play sound before the visitor touches the page,
+ * so playback is requested at load and, if blocked, starts on the first tap/click/key press.
+ * The toggle turns it off (and on again) at any time.
+ */
 export function useSound(src?: string) {
-  const [on, setOn] = useState(false);
+  const [on, setOn] = useState(true);
+  const wanted = useRef(true);
+  const blocked = useRef(false);
+  const unlockedAt = useRef(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const synthRef = useRef<Synth | null>(null);
   const fileFailed = useRef(false);
 
-  const stop = useCallback(() => {
-    audioRef.current?.pause();
-    synthRef.current?.stop();
-    synthRef.current = null;
-    setOn(false);
-  }, []);
-
-  const useFallback = useCallback(() => {
+  const startSynth_ = useCallback(() => {
     audioRef.current?.pause();
     audioRef.current = null;
     fileFailed.current = true;
     if (!synthRef.current) synthRef.current = startSynth();
+    const ctx = synthRef.current?.ctx;
+    if (ctx && ctx.state === 'suspended') {
+      blocked.current = true;
+      void ctx.resume().then(() => { if (ctx.state === 'running') blocked.current = false; });
+    }
   }, []);
 
-  const start = useCallback(() => {
-    setOn(true);
+  const tryStart = useCallback(() => {
+    if (!wanted.current) return;
     if (src && !fileFailed.current) {
       const a = audioRef.current ?? new Audio(asset(src));
       audioRef.current = a;
       a.loop = true;
       a.volume = 0.5;
-      a.onerror = useFallback;
-      a.play().catch(useFallback);
+      a.onerror = startSynth_;
+      a.play().then(() => { blocked.current = false; }).catch((e: Error) => {
+        if (e?.name === 'NotAllowedError') blocked.current = true; // wait for a tap
+        else startSynth_();
+      });
     } else {
-      useFallback();
+      startSynth_();
     }
-  }, [src, useFallback]);
+  }, [src, startSynth_]);
 
-  const toggle = useCallback(() => (on ? stop() : start()), [on, start, stop]);
+  const stop = useCallback(() => {
+    audioRef.current?.pause();
+    synthRef.current?.stop();
+    synthRef.current = null;
+    blocked.current = false;
+  }, []);
 
-  useEffect(() => () => { audioRef.current?.pause(); synthRef.current?.stop(); }, []);
+  useEffect(() => {
+    tryStart();
+    const unlock = () => {
+      if (!wanted.current || !blocked.current) return;
+      unlockedAt.current = Date.now();
+      blocked.current = false;
+      if (synthRef.current) void synthRef.current.ctx.resume();
+      else tryStart();
+    };
+    const evs = ['pointerdown', 'touchend', 'keydown', 'click'];
+    evs.forEach((e) => window.addEventListener(e, unlock, { capture: true, passive: true }));
+    return () => {
+      evs.forEach((e) => window.removeEventListener(e, unlock, { capture: true }));
+      audioRef.current?.pause();
+      synthRef.current?.stop();
+      synthRef.current = null;
+    };
+  }, [tryStart]);
+
+  const toggle = useCallback(() => {
+    // the tap that unlocked autoplay must not also switch the music off
+    if (wanted.current && Date.now() - unlockedAt.current < 500) return;
+    if (wanted.current) { wanted.current = false; stop(); setOn(false); }
+    else { wanted.current = true; setOn(true); tryStart(); }
+  }, [stop, tryStart]);
 
   return { on, toggle };
 }
