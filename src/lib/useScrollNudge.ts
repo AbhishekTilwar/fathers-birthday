@@ -9,9 +9,10 @@ import { useEffect } from 'react';
  * Never runs for reduced-motion visitors.
  */
 const SPEED = 62; // px per second through the reels
+const SPEED_DETAILS = 95; // Reel Four moves a little quicker through event information
 const SPEED_MILESTONE = 150; // the title sequence is a long scroll track
 const SPEED_VENUE = 300; // reel five rolls past quickly
-const HOLD_DETAILS_MS = 2000; // reel four rests briefly
+const HOLD_DETAILS_MS = 1600; // reel four rests briefly
 
 export function useScrollNudge(enabled: boolean) {
   useEffect(() => {
@@ -28,6 +29,12 @@ export function useScrollNudge(enabled: boolean) {
       const v = document.querySelector('.venue');
       if (!v) return false;
       const r = v.getBoundingClientRect();
+      return r.top < window.innerHeight && r.bottom > 0;
+    };
+    const inDetails = () => {
+      const d = document.querySelector('.details');
+      if (!d) return false;
+      const r = d.getBoundingClientRect();
       return r.top < window.innerHeight && r.bottom > 0;
     };
     const inMilestone = () => {
@@ -50,7 +57,7 @@ export function useScrollNudge(enabled: boolean) {
         const stop = stopY();
         const ramp = Math.min(1, (now - t0) / 1800); // ease in
         const brake = Math.max(0.12, Math.min(1, (stop - pos) / 360)); // ease out near the details
-        const v = inVenue() ? SPEED_VENUE : inMilestone() ? SPEED_MILESTONE : SPEED;
+        const v = inVenue() ? SPEED_VENUE : inDetails() ? SPEED_DETAILS : inMilestone() ? SPEED_MILESTONE : SPEED;
         pos = Math.min(stop, pos + v * ramp * brake * dt);
         window.scrollTo({ top: pos, behavior: 'instant' });
         if (pos >= stop - 0.5) {

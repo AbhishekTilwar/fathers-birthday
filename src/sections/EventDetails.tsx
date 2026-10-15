@@ -9,8 +9,8 @@ export function EventDetails() {
   const { date, venueName, address, phones, valet, mapsLabel, mapsUrl } = invitation.event;
   return (
     <section className="scene details" id="details" aria-labelledby="details-h">
-      <Reveal as="p" className="eyebrow">Reel Four · The Celebration</Reveal>
-      <Reveal className="paper">
+      <Reveal as="p" className="eyebrow" duration={1.1}>Reel Four · The Celebration</Reveal>
+      <Reveal className="paper" duration={1.15}>
         <div className="tex" aria-hidden="true" />
         <CornerSpray className="cs tl" /><CornerSpray className="cs br" />
         <div className="paper-inner">
