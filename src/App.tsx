@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig } from 'motion/react';
 import { invitation } from './data/invitation';
 import { useSound } from './lib/useSound';
+import { asset } from './lib/asset';
 import { useScrollNudge } from './lib/useScrollNudge';
 import { Overlays } from './components/Overlays';
 import { SoundToggle } from './components/SoundToggle';
@@ -22,6 +23,17 @@ export default function App() {
   const timers = useRef<number[]>([]);
   const sound = useSound(invitation.audio);
   useScrollNudge(stage === 'main');
+
+  // Fetch and decode every photograph during the opening so nothing waits for its turn later.
+  useEffect(() => {
+    const srcs = [invitation.milestone.portrait.src, ...invitation.journey.frames.map((f) => f.src), ...invitation.venue.frames.map((f) => f.src)];
+    srcs.forEach((src) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = asset(src);
+      void img.decode?.().catch(() => { /* missing photo: the placeholder is shown instead */ });
+    });
+  }, []);
 
   useEffect(() => {
     document.body.classList.toggle('locked', stage === 'scene');

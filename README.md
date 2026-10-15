@@ -21,20 +21,15 @@ Copy files into `public/images/` with these **exact names** (JPG). Until a file 
 | Role | File |
 |---|---|
 | Portrait (shown in a framed placeholder in the honoree scene until added) | `public/images/family/father-portrait.jpg` |
-| Album – childhood | `public/images/family/childhood-memories-01.jpg` |
 | Album – family | `public/images/family/family-memories-01.jpg` |
-| Album – career | `public/images/family/career-moments-01.jpg` |
-| Album – memorable moment | `public/images/family/memorable-moments-01.jpg` |
 | Venue – exterior (single wide photo) | `public/images/venue/venue-exterior.jpg` |
 
 Tips: album photos are cropped to 4:5 portrait, venue photos to wide 21:9 (16:10 on phones); keep subjects centred.
 Resize to ~1600px on the long edge and compress (under ~300 KB each) for fast loading on WhatsApp/mobile.
 To use another extension (png/webp) or add more album photos, edit the `frames` lists in `invitation.ts`; captions are editable there too.
 
-### Venue photographs
-No verified, clearly licensed photographs of The Legend Inn, Nagpur could be confirmed, so **none are bundled**
-and nothing is hotlinked. The venue scene shows labelled placeholders (`src/data/invitation.ts`, `venue.frames`).
-Add your own photos, or ones you have permission to use (e.g. supplied by the hotel). Do not use images of other hotels.
+### Venue photograph
+The venue scene uses a photograph of The Legend Inn supplied by the family (`public/images/venue/venue-exterior.jpg`, shown in a 3:4 frame; tap it to see the full 9:16 photo). Replace the file to change it.
 
 ## Music
 Off by default; starts only when the visitor taps the toggle. Drop a licensed instrumental at

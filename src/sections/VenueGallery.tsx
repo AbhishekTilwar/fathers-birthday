@@ -19,13 +19,13 @@ export function VenueGallery() {
         {frames.map((f, i) => (
           <Reveal key={f.src} kind="wipe" delay={0.1} className={`venue-frame f${i}`}>
             <button type="button" className="cinema-btn" disabled={missing[f.src]} onClick={() => setOpen(i)} aria-label={`Enlarge: ${f.alt}`}>
-              <SafeImage slot={f} ratio="21 / 9" className="cinema" onMissing={() => setMissing((m) => ({ ...m, [f.src]: true }))} />
+              <SafeImage slot={f} ratio="3 / 4" className="cinema" onMissing={() => setMissing((m) => ({ ...m, [f.src]: true }))} />
             </button>
           </Reveal>
         ))}
       </div>
       <AnimatePresence>
-        {open !== null && <Lightbox items={frames} index={open} ratio="21 / 9" onIndex={setOpen} onClose={() => setOpen(null)} />}
+        {open !== null && <Lightbox items={frames} index={open} ratio="9 / 16" onIndex={setOpen} onClose={() => setOpen(null)} />}
       </AnimatePresence>
     </section>
   );

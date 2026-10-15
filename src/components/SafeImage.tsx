@@ -42,7 +42,7 @@ export function SafeImage({ slot, ratio, eager, hideIfMissing, className = '', o
           src={asset(slot.src)}
           alt={slot.alt}
           style={slot.position ? { objectPosition: slot.position } : undefined}
-          loading={eager ? 'eager' : 'lazy'}
+          loading="eager"
           decoding="async"
           onError={fail}
         />

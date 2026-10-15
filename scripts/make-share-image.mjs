@@ -20,7 +20,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <text x="${cx}" y="150" text-anchor="middle" font-family="${serif}" font-size="${hasPortrait ? 15 : 22}" letter-spacing="${hasPortrait ? 3 : 5}" fill="#d3b886">WITH GREAT JOY, WE INVITE YOU TO CELEBRATE</text>
   <text x="${cx}" y="262" text-anchor="middle" font-family="${serif}" font-size="${hasPortrait ? 60 : 104}" font-weight="bold" fill="#f3e8d6">Shri Pravin Tilwar</text>
   <path d="M${cx - 110} 300h220" stroke="#b99a65" stroke-width="1.5"/>
-  <text x="${cx}" y="350" text-anchor="middle" font-family="${serif}" font-size="${hasPortrait ? 20 : 24}" letter-spacing="3" fill="#d3b886">DIVISIONAL ENGINEER, BSNL</text>
+  <text x="${cx}" y="350" text-anchor="middle" font-family="${serif}" font-size="${hasPortrait ? 20 : 24}" letter-spacing="3" fill="#d3b886">RETD. DIVISIONAL ENGINEER, BSNL</text>
   <text x="${cx}" y="425" text-anchor="middle" font-family="${serif}" font-size="${hasPortrait ? 32 : 42}" font-style="italic" fill="#f3e8d6">60th Birthday &amp; Retirement</text>
   <text x="${cx}" y="468" text-anchor="middle" font-family="${serif}" font-size="${hasPortrait ? 32 : 42}" font-style="italic" fill="#f3e8d6">Celebration</text>
   <text x="${cx}" y="545" text-anchor="middle" font-family="${serif}" font-size="${hasPortrait ? 20 : 25}" fill="#b99a65">Sunday, 1st November 2026 · The Legend Inn, Nagpur</text>
